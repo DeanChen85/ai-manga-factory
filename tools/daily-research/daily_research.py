@@ -209,9 +209,12 @@ def write_today(report):
 
 
 def push_to_repo(token, findings_count, dry_run):
-    """Clone public repo, copy outputs, commit + push."""
+    """Clone public repo, copy outputs, commit + push. Skips push if no findings."""
     if dry_run:
         log(f'[dry-run] would push {findings_count} findings')
+        return
+    if findings_count == 0:
+        log('quiet: no new findings, skipping push')
         return
     if REPO_DIR.exists():
         subprocess.run(['rmdir', '/S', '/Q', str(REPO_DIR)], shell=True, check=False)
