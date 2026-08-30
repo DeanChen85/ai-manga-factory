@@ -61,3 +61,7 @@ Found **27** new item(s):
 - HN (ai short drama): [Quiet on set. How AI transformed China's microdrama scene](https://www.cnn.com/2026/08/22/style/short-drama-ai-china-intl-hnk)  
   
 
+## 2026-08-30
+
+No new items across GitHub / Reddit / HN searches.
+
