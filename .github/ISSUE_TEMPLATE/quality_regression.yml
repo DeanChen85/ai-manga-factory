@@ -1,0 +1,66 @@
+name: Generated-video quality regression
+description: Report a reproducible character, continuity, prompt, audio or delivery regression without sharing secrets or private media.
+title: "[Quality regression] "
+labels:
+  - quality-regression
+body:
+  - type: markdown
+    attributes:
+      value: Do not paste API keys, private model URLs, personal media or local database files. Use redacted hashes and an explicitly shareable short sample.
+  - type: input
+    id: version
+    attributes:
+      label: Application revision / profile contract
+      placeholder: commit or contract version
+    validations:
+      required: true
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Failing stage
+      options:
+        - Story / shot contract
+        - Character or scene asset
+        - Proof render
+        - Stable promotion / formal render
+        - Continuity between shots
+        - Dialogue / subtitle / audio
+        - Final composition / delivery ZIP
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected visible or audible result
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result and exact rejection reason
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Redacted evidence
+      description: Include panel id, prompt/profile contract versions, artifact/decoded hashes and timestamps. Attach media only if you have the right to publish it.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: List UI actions from creative brief to failure; do not include secrets.
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Public-report safety
+      options:
+        - label: I removed credentials, personal data, private paths and non-public model URLs.
+          required: true
+        - label: I have permission to publish every attached image, audio or video.
+          required: true
+

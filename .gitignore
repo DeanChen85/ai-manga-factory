@@ -1,0 +1,60 @@
+# Secrets
+.env
+*.key
+*.pem
+minimax api.txt
+pipeline/config.json
+
+# Python/runtime state
+__pycache__/
+*.py[cod]
+*.backup.*
+.pytest_cache/
+.coverage
+htmlcov/
+.planning/
+
+# Generated projects and logs
+logs/
+state/
+output/
+# Explicit release-preflight rule; retained even though output/ already covers it.
+output/projects/
+pending_tasks.json
+
+# Local model weights and large generated assets
+models/
+charref/
+scenes/
+scenes_v2/
+composite_panels/
+
+# Local editor/OS files
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
+# Pre-repository local experiments and dated acceptance artifacts
+/test_*.py
+/test_story*.txt
+/render_all_panels.py
+/ep_*.json
+/charref_summary.json
+/ACCEPTANCE_REPORT*.md
+/BASELINE_*.md
+/DELIVERY_NOTES_*.md
+/REACCEPTANCE_REPORT_*.md
+/TARGET_E2E_ACCEPTANCE_*.md
+/SERIES_TARGET_ACCEPTANCE_*.md
+/REAL_USER_E2E_ACCEPTANCE_*.md
+/*_202608*.md
+/*.log
+/nul
+/findings.md
+/progress.md
+/task_plan.md
+/.claude/
+/custom_nodes/
+/dist/
+/episodes/

@@ -1,0 +1,6 @@
+AI Manga Factory
+Copyright 2026 AI Manga Factory contributors
+
+This product can interoperate with MiniMax H3, ComfyUI and optional custom
+nodes. Those dependencies, model weights and generated assets are separate
+works governed by their own licenses. See THIRD_PARTY_NOTICES.md.

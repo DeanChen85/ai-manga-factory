@@ -1,0 +1,5 @@
+# AI Manga Factory web/runtime dependencies.
+# ComfyUI and custom-node dependencies are managed by the ComfyUI runtime.
+streamlit==1.60.0
+requests==2.32.5
+Pillow>=12.1,<13

@@ -1,0 +1,98 @@
+{
+  "schema": "ai-manga-source-lock/v1",
+  "generated_at": "2026-08-28T16:20:00+08:00",
+  "policy": {
+    "integration": "clean-room derived contract; links and hashes only for MiniMax prompt guides",
+    "official_guides_vendored": false,
+    "model_weights_vendored": false
+  },
+  "sources": [
+    {
+      "name": "MiniMax H3 official repository and prompt-writing skill",
+      "url": "https://github.com/MiniMax-AI/MiniMax-H3",
+      "commit": "d21241f0a4b3acbb34c97dae47fa417b7065e438",
+      "license_note": "No root repository license was observed during source lock; do not redistribute its guide files from this project.",
+      "artifacts": [
+        {
+          "path": "skills/h3-prompt-writing/SKILL.md",
+          "sha256": "a7000443588ca3f145e3b3fd8900f14e0325dc460bd811268fac89a9dc8e56d0"
+        },
+        {
+          "path": "skills/h3-prompt-writing/references/base-en.txt",
+          "sha256": "2cfebc096a6e08370f288d468d90b60f7f9bcb938f94bf090816e910e48e75fc"
+        },
+        {
+          "path": "skills/h3-prompt-writing/references/ref-en.txt",
+          "sha256": "1e574f356716ad55612247ffb7bbccbcdb484ad96599d63c7dca1af186b1fab7"
+        }
+      ]
+    },
+    {
+      "name": "ComfyUI native MiniMax H3 documentation and nodes",
+      "url": "https://docs.comfy.org/tutorials/video/minimax/minimax-h3",
+      "source_url": "https://github.com/Comfy-Org/ComfyUI/blob/master/comfy_extras/nodes_minimax_h3.py",
+      "commit": "b78cec879b9460d5cb25228a83a942fb78d2cd24",
+      "license_note": "Upstream code is not vendored by this skill; see the ComfyUI repository license."
+    },
+    {
+      "name": "MiniMax H3 official model card and model license",
+      "url": "https://huggingface.co/MiniMaxAI/MiniMax-H3",
+      "license_url": "https://huggingface.co/MiniMaxAI/MiniMax-H3/blob/main/LICENSE",
+      "license_note": "MiniMax H3 Community License Agreement applies to the model weights; the weights are not covered by this repository's Apache-2.0 code license."
+    },
+    {
+      "name": "ComfyUI MiniMax H3 Turbo",
+      "url": "https://github.com/Larryvrh/ComfyUI-MiniMax-H3-Turbo",
+      "commit": "4274783a23afcfdbea3b4876cb79effd6c510785",
+      "license": "Apache-2.0",
+      "license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "readme_sha256": "1676b6cd2804c43ce6c7c822d0a5c6a33bea1ce728449fa0d44ebf0f07583e3d"
+    },
+    {
+      "name": "ComfyUI KJNodes SageAttention integration",
+      "url": "https://github.com/kijai/ComfyUI-KJNodes",
+      "commit": "3f20054214fec9f9234fd3841ae6f1e4287948f6",
+      "license": "MIT",
+      "use": "PathchSageAttentionKJ runtime node; upstream source is installed separately and not vendored"
+    },
+    {
+      "name": "DirectorSKILL",
+      "url": "https://github.com/wuwangzhang1216/DirectorSKILL",
+      "commit": "47db7d9b951a9f27f7b4b727a6ca0e01ab56f7c6",
+      "license": "MIT",
+      "use": "concept comparison only: shot purpose, blocking, bounded adapters and explicit failure codes; no source text copied"
+    },
+    {
+      "name": "MiniMax CLI H3 video reference",
+      "url": "https://github.com/MiniMax-AI/cli/blob/main/skill/h3-video/references/h3-video.md",
+      "checked_at": "2026-08-28T16:20:00+08:00",
+      "license_note": "Official MiniMax source; linked for validation research only and not vendored.",
+      "use": "exact timeline, initial/final-state, task-id persistence and bounded polling requirements"
+    },
+    {
+      "name": "ComfyUI official server routes",
+      "url": "https://docs.comfy.org/development/comfyui-server/comms_routes",
+      "checked_at": "2026-08-28T16:20:00+08:00",
+      "license_note": "Official ComfyUI documentation; no source code copied.",
+      "use": "prompt, queue, history, websocket, interrupt and free-memory integration contract"
+    },
+    {
+      "name": "ComfyUI Wan Animate and SCAIL node documentation",
+      "url": "https://github.com/Comfy-Org/embedded-docs",
+      "checked_at": "2026-08-28T16:20:00+08:00",
+      "license_note": "Documentation repository and every referenced model/node retain their upstream licenses.",
+      "use": "optional-backend research only: reference/pose binding, previous_frames and video_frame_offset; not integrated into H3 graphs"
+    },
+    {
+      "name": "Community ComfyUI video workflow comparisons",
+      "urls": [
+        "https://github.com/Filmclusive/ComfyUI-workflows",
+        "https://github.com/MCKRUZ/ComfyUI-Expert/blob/master/skills/comfyui-video-pipeline/SKILL.md",
+        "https://github.com/mor-o/comfyui-2d-character-pipeline/blob/main/docs/workflow-2-video-gen.md"
+      ],
+      "checked_at": "2026-08-28T16:20:00+08:00",
+      "license_note": "Community guidance is not an official H3 guarantee; verify repository, node, model and workflow licenses before import.",
+      "use": "comparison only; FP8, SageAttention, FramePack, RIFE and deflicker remain opt-in experiments pending local A/B acceptance"
+    }
+  ]
+}
