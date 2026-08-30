@@ -1,0 +1,26 @@
+{
+  "githubKeywords": [
+    "minimax-h3",
+    "short-drama-pipeline",
+    "ai-manga",
+    "comfyui-h3-director"
+  ],
+  "redditSubs": [
+    "comfyui",
+    "StableDiffusion"
+  ],
+  "hnQueries": [
+    "minimax h3",
+    "comfyui h3",
+    "ai short drama",
+    "comfyui director"
+  ],
+  "githubDaysBack": 14,
+  "minStarsForAlert": 3,
+  "knownReposToTrack": [
+    "Larryvrh/ComfyUI-MiniMax-H3-Turbo",
+    "Comfy-Org/ComfyUI",
+    "kijai/ComfyUI-KJNodes",
+    "MiniMax-AI/MiniMax-H3"
+  ]
+}
