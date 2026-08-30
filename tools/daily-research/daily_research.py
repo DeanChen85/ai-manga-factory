@@ -30,6 +30,12 @@ GIT_TOKEN_INPUT = 'protocol=https\nhost=github.com'
 REPO = 'DeanChen85/ai-manga-factory'
 REPO_DIR = Path(r'C:\Users\Dean\AppData\Local\Temp\dsh-ai-manga-factory-research')
 
+# 红线：webhook URL 视为秘密。日志里只显示末 8 位。
+def _redact(url: str) -> str:
+    if not url:
+        return '(unset)'
+    return '***' + url[-12:]
+
 
 def log(msg):
     print(f'[{datetime.now().strftime("%H:%M:%S")}] {msg}', file=sys.stderr, flush=True)
@@ -103,6 +109,72 @@ def reddit_rss(sub):
 
     children = data.get('data', {}).get('children', [])
     return Root([Entry(c['data']) for c in children])
+
+
+def feishu_notify(findings, webhook_url: str):
+    """Send an interactive card to a Feishu/Lark bot webhook.
+
+    Only posts when there are new findings. Capped at 10 items per
+    notification to avoid spam. Returns True on success, False on error.
+    """
+    if not webhook_url or not findings:
+        return False
+    top = findings[:10]
+    lines = []
+    for f in top:
+        if f['type'] == 'github-repo':
+            lang = f.get('language') or 'n/a'
+            desc = (f.get('description') or '').replace('\n', ' ').strip()
+            lines.append(
+                f"**[{f['name']}]({f['url']})** ⭐ {f['stars']} · {lang}\n"
+                f"{desc}"
+            )
+        elif f['type'] == 'reddit-post':
+            lines.append(f"**r/{f['subreddit']}** [{f['title']}]({f['url']})")
+        elif f['type'] == 'hn-post':
+            lines.append(f"**HN** [{f['title']}]({f['url']})")
+    if not lines:
+        return False
+
+    overflow = len(findings) - len(top)
+    overflow_text = f"\n\n_...还有 {overflow} 条_ " if overflow > 0 else ""
+
+    card = {
+        "msg_type": "interactive",
+        "card": {
+            "header": {
+                "template": "blue",
+                "title": {
+                    "content": f"AI Manga Factory 每日调研: {len(findings)} 条新发现",
+                    "tag": "plain_text"
+                }
+            },
+            "elements": [
+                {"tag": "markdown", "content": "\n\n".join(lines) + overflow_text},
+                {"tag": "hr"},
+                {
+                    "tag": "note",
+                    "elements": [
+                        {"tag": "plain_text", "content": "DeanChen85/ai-manga-factory · 每天 09:00 / 21:00 自动扫描 GitHub / Reddit / HN"}
+                    ]
+                }
+            ]
+        }
+    }
+    try:
+        req = request.Request(
+            webhook_url,
+            data=json.dumps(card).encode('utf-8'),
+            headers={'Content-Type': 'application/json'},
+            method='POST',
+        )
+        with request.urlopen(req, timeout=10) as resp:
+            body = resp.read().decode('utf-8', errors='replace')
+            log(f'feishu notified ({resp.status}): {body[:120]}')
+            return True
+    except Exception as e:
+        log(f'feishu notify failed: {e}')
+        return False
 
 
 def hn_search(query):
@@ -323,6 +395,13 @@ def main():
             })
 
     log(f'{len(findings)} new findings')
+
+    # 2c. Feishu notification (only when there are new findings)
+    webhook = (config.get('feishuWebhook', '') or os.environ.get('DSH_FEISHU_WEBHOOK', '')).strip()
+    if findings and webhook:
+        feishu_notify(findings, webhook)
+    elif findings and not webhook:
+        log('feishu webhook not configured; skipping notification')
 
     # 3. Write report
     report = render_findings(findings)

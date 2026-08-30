@@ -56,5 +56,20 @@ python tools/daily-research/daily_research.py --dry-run
 改 `config.json`：
 - `githubKeywords`：新增/修改搜索关键词
 - `redditSubs`：新增/修改订阅
+- `hnQueries`：Hacker News 搜索词
 - `githubDaysBack`：回溯天数（默认 14）
-- `minStarsForAlert`：star 阈值（小于它不进研报，<TODO>）
+- `minStarsForAlert`：star 阈值（小于它不进研报）
+- `feishuWebhook`：飞书机器人 webhook，**每次有发现时自动发卡片到群**；留空则不发
+
+## 飞书通知
+
+每次扫描有**新发现**时，自动向 `feishuWebhook` 推送一张交互式卡片，包含：
+- 项目名 / 链接 / ⭐ / 语言
+- 描述（GitHub）/ 标题（Reddit、HN）
+- 最多 10 条/卡，超过会提示
+
+**0 发现时不通知**（避免噪音）。
+
+**安全提醒**：webhook URL 等同于群聊密码。它已经在公开 Git 仓库的 `config.json` 里——任何人都能拿到并往群里发消息。
+- 想换 URL：编辑 `config.json` → 重跑脚本
+- 想"完全私有"：把 webhook 移到环境变量 `$env:DSH_FEISHU_WEBHOOK`，脚本优先读 env，再读 config

@@ -22,5 +22,6 @@
     "Comfy-Org/ComfyUI",
     "kijai/ComfyUI-KJNodes",
     "MiniMax-AI/MiniMax-H3"
-  ]
+  ],
+  "feishuWebhook": "https://open.feishu.cn/open-apis/bot/v2/hook/8594278c-c1bf-405b-b8e1-dd0480e9b498"
 }
