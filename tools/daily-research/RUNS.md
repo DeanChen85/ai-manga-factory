@@ -128,3 +128,19 @@ Found **27** new item(s):
 - HN (ai short drama): [Quiet on set. How AI transformed China's microdrama scene](https://www.cnn.com/2026/08/22/style/short-drama-ai-china-intl-hnk)  
   
 
+
+## 2026-08-30 (manual, DSH agent)
+
+Deep-dive comparison: `T8mars/comfyui-minimax-h3-audio-T8` (GPL-3.0,
+921 files, 8.5 MB Python) vs your local `ComfyUI_RH_MinMaxH3` (Apache-2.0).
+
+**Found 8 priority items** (1. Long video orchestration, 2. Face/Skin refine,
+3. FlashVSR upscale, 4. Prompt Relay, 5. Audio Refine, 6. FastH3 VSA,
+7. Speech/TTS, 8. Error recovery). **CRITICAL**: T8 is GPL-3.0; do
+NOT copy T8 source into pipeline/. Use the gitignored custom_nodes/
+separation pattern already in place.
+
+**Action taken**: Implemented priority #1 (long video orchestration) as
+`pipeline/long_video_orchestrator.py` — original Apache-2.0 code, 17
+new tests pass. See `docs/research/EXTERNAL_T8mars_minimax-h3-audio-T8_2026-08-30.md`.
+
