@@ -207,9 +207,39 @@ T8 大量带 `_advanced` 或 `_exp` 后缀的节点，按 README 第 22 行"建�
 - ✅ 已与本仓库 `custom_nodes/ComfyUI_RH_MinMaxH3` 做功能矩阵对比
 - ✅ 已识别 8 项可借鉴能力（4 红 / 3 黄 / 1 绿）
 - ✅ 已警示 LICENSE 兼容性
-- ⏭️ 等待用户决策哪些项进入下一轮 pipeline/ 实现
+- ✅ **P1-P4 已实现**（long_video_orchestrator / face_refine_runner / video_upscale / prompt_relay + proof_fast profile）
+- ✅ **P2 compatibility_matrix + preflight 校验已落地**（2026-08-30 第二轮优化）
+- ✅ **P4 speaker ID 稳定器已落地**（2026-08-30 第二轮优化）
+- 📝 P5/P6/P7 待后续迭代
 
-## 八、引用与来源
+---
+
+## 八、2026-08-30 第二轮优化记录
+
+### P4: Speaker ID 稳定器（prompt_relay.py）
+
+**问题**：长视频接力生成时，不同 chunk 可能丢失 `(S1)/(S2)` 或 `<Picture N>` 标签，导致角色声音漂移。
+
+**解决**：新增 `stabilize_speaker_ids()` 函数，为每个 chunk 注入完整的 speaker map 和 reference tag 列表作为头部注释。不影响 H3 解析，但保证跨 chunk 身份一致性。
+
+**测试**：4 个新测试用例全部通过（test_prompt_relay.py）。
+
+### P2: 节点包兼容性矩阵 + 预检校验
+
+**问题**：用户克隆后不知道哪些节点包能装、哪些会冲突，只能等爆红才排查。
+
+**解决**：
+- 新建 `docs/compatibility_matrix.md`：完整列出 4 个核心节点包的 license、最低 ComfyUI 版本、已知冲突、安装方式
+- `comfy_preflight.py` 新增 `_check_node_packages()`：启动前自动检测 T8/RH 双时钟采样器冲突、缺失包警告
+- README.md 增加兼容性矩阵链接
+
+**测试**：2 个新测试用例全部通过（test_comfy_preflight.py）。
+
+**总测试数**：339 → **345**（+6 新测试）。
+
+---
+
+## 九、引用与来源
 
 - T8mars/comfyui-minimax-h3-audio-T8 @ commit `6490906` (2026-08)
 - 来源锁：`https://github.com/T8mars/comfyui-minimax-h3-audio-T8`

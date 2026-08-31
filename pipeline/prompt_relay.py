@@ -224,6 +224,36 @@ def _hash(s: str) -> str:
     return hashlib.sha256(s.encode("utf-8")).hexdigest()
 
 
+def stabilize_speaker_ids(chunks: list[PromptChunk]) -> list[PromptChunk]:
+    """Ensure every chunk contains the complete set of (S\d+) and <X N> tags.
+
+    This prevents speaker identity drift across relay chunks in long videos.
+    The header comment is ignored by H3 but preserves stable IDs for
+    downstream QA / hash binding.
+    """
+    if not chunks:
+        return []
+
+    all_speakers: set[str] = set()
+    all_refs: set[str] = set()
+    for c in chunks:
+        all_speakers.update(re.findall(r'\(S\d+\)', c.text))
+        all_refs.update(re.findall(r'<(Picture|Subject|Video|Audio)\s+\d+>', c.text))
+
+    if not all_speakers and not all_refs:
+        return chunks  # nothing to stabilize
+
+    header = f"# Stable IDs: {', '.join(sorted(all_speakers))} | Refs: {', '.join(sorted(all_refs))}\n"
+    out: list[PromptChunk] = []
+    for c in chunks:
+        new_text = header + c.text
+        out.append(PromptChunk(
+            index=c.index, text=new_text, char_count=len(new_text),
+            sha256=_hash(new_text), shot_range=c.shot_range,
+        ))
+    return out
+
+
 # === CLI ===
 
 if __name__ == "__main__":
@@ -236,7 +266,8 @@ if __name__ == "__main__":
     text = Path(sys.argv[1]).read_text(encoding="utf-8")
     max_c = int(sys.argv[2]) if len(sys.argv) > 2 else 4000
     chunks = split_into_chunks(text, max_chunk_chars)
-    for c in chunks:
+    stabilized = stabilize_speaker_ids(chunks)
+    for c in stabilized:
         print(f"--- chunk {c.index} ({c.char_count} chars, {c.contains_full_shots}) {c.sha256[:12]} ---")
         print(c.text)
         print()

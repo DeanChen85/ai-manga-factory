@@ -26,6 +26,65 @@ REQUIRED_NODES = (
 RECOMMENDED_NODES = ("MiniMaxH3AddGuide",)
 REQUIRED_MODELS = (H3_UNET, H3_CLIP, H3_VIDEO_VAE, H3_AUDIO_VAE)
 
+# === Node package compatibility matrix ===
+
+NODE_PACKAGE_SPECS: dict[str, dict] = {
+    "ComfyUI_RH_MinMaxH3": {
+        "min_comfyui": "0.33.2",
+        "conflicts": [],
+        "notes": "Core H3 runtime; required.",
+    },
+    "ComfyUI_MiniMaxH3_Director": {
+        "min_comfyui": "0.33.2",
+        "conflicts": [],
+        "notes": "Multi-segment director UI; optional but recommended.",
+    },
+    "ComfyUI-KJNodes": {
+        "min_comfyui": "0.32.0",
+        "conflicts": ["Sol-Attn Triton"],
+        "notes": "Utility nodes; GPL-3.0 (isolated via .gitignore).",
+    },
+    "comfyui-minimax-h3-audio-T8": {
+        "min_comfyui": "0.34.0",
+        "conflicts": ["RHMiniMaxH3DualSigmaSampler"],
+        "notes": "Audio refine / FlashVSR / long-video orchestration. GPL-3.0.",
+    },
+}
+
+
+def _check_node_packages(object_info: dict) -> list[str]:
+    """Return warnings for missing or conflicting node packages."""
+    warnings: list[str] = []
+    installed_nodes = set(object_info.keys())
+
+    # Detect which packages are installed by checking for signature nodes
+    has_rh = "RHMiniMaxH3DualSigmaSampler" in installed_nodes or "RHMiniMaxH3ModelLoader" in installed_nodes
+    has_t8 = "MiniMaxH3AudioConditioningT8" in installed_nodes or "MiniMaxH3FlashVSRRestoreT8Advanced" in installed_nodes
+    has_director = "MiniMaxH3Director" in installed_nodes
+    has_kjnodes = "PathchSageAttentionKJ" in installed_nodes
+
+    pkg_status = {
+        "ComfyUI_RH_MinMaxH3": has_rh,
+        "ComfyUI_MiniMaxH3_Director": has_director,
+        "ComfyUI-KJNodes": has_kjnodes,
+        "comfyui-minimax-h3-audio-T8": has_t8,
+    }
+
+    for pkg, installed in pkg_status.items():
+        if not installed:
+            warnings.append(f"⚠️  {pkg} not detected in ComfyUI")
+            continue
+
+        spec = NODE_PACKAGE_SPECS[pkg]
+        for conflict in spec["conflicts"]:
+            if conflict in installed_nodes:
+                warnings.append(
+                    f"  {pkg} conflicts with {conflict} — "
+                    f"use only one at a time"
+                )
+
+    return warnings
+
 
 def _http_json(url: str, timeout: float = 20.0) -> dict[str, Any]:
     request = urllib.request.Request(url, headers={"Accept": "application/json"})
@@ -97,6 +156,11 @@ def run_preflight(
         failures.append("ffmpeg unavailable")
     if not ffprobe["available"]:
         failures.append("ffprobe unavailable")
+
+    # Node package compatibility check
+    pkg_warnings = _check_node_packages(live_nodes)
+    warnings.extend(pkg_warnings)
+
     return {
         "schema": "ai-manga-comfy-preflight/v1",
         "passed": not failures,

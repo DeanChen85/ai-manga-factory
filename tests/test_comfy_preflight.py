@@ -48,6 +48,20 @@ class ComfyPreflightTests(unittest.TestCase):
         self.assertTrue(result["models"]["missing_required"])
         self.assertIn("ffmpeg unavailable", result["failures"])
 
+    def test_node_package_conflict_warning(self):
+        """T8 + RH dual sampler both installed should warn."""
+        fake_nodes = {
+            "RHMiniMaxH3DualSigmaSampler": {},
+            "MiniMaxH3AudioConditioningT8": {},
+        }
+        warnings = comfy_preflight._check_node_packages(fake_nodes)
+        self.assertTrue(any("conflicts with" in w for w in warnings), f"Expected conflict warning, got: {warnings}")
+
+    def test_no_conflict_when_only_one_installed(self):
+        fake_nodes = {"RHMiniMaxH3DualSigmaSampler": {}}
+        warnings = comfy_preflight._check_node_packages(fake_nodes)
+        self.assertFalse(any("conflicts with" in w for w in warnings))
+
 
 if __name__ == "__main__":
     unittest.main()

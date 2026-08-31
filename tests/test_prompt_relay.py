@@ -9,7 +9,7 @@ sys.path.insert(0, str(ROOT / 'pipeline'))
 
 from prompt_relay import (
     extract_shot_blocks, reassemble, split_into_chunks,
-    _find_safe_boundary, _hash,
+    _find_safe_boundary, _hash, stabilize_speaker_ids,
 )
 
 
@@ -111,6 +111,46 @@ class TestHashStable(unittest.TestCase):
 
     def test_diff_input_diff_hash(self):
         self.assertNotEqual(_hash("a"), _hash("b"))
+
+
+class TestStabilizeSpeakerIds(unittest.TestCase):
+    def test_preserves_all_speakers_across_chunks(self):
+        text = "[Shot 1] (S1) says hello. [Shot 2] (S2) replies."
+        chunks = split_into_chunks(text, max_chunk_chars=30)
+        self.assertGreater(len(chunks), 1)
+        stabilized = stabilize_speaker_ids(chunks)
+        # Every chunk should contain both (S1) and (S2)
+        for c in stabilized:
+            self.assertIn("(S1)", c.text)
+            self.assertIn("(S2)", c.text)
+
+    def test_preserves_reference_tags(self):
+        text = "[Shot 1] <Picture 1> shows hero. [Shot 2] <Audio 1> plays music."
+        chunks = split_into_chunks(text, max_chunk_chars=30)
+        stabilized = stabilize_speaker_ids(chunks)
+        # Header should list ALL ref types found across all chunks
+        for c in stabilized:
+            self.assertIn("Refs:", c.text)
+            header_line = c.text.split("\n")[0]
+            self.assertIn("Picture", header_line)
+            self.assertIn("Audio", header_line)
+
+    def test_no_op_when_no_speakers_or_refs(self):
+        text = "[Shot 1] No speakers here. [Shot 2] Just action."
+        chunks = split_into_chunks(text, max_chunk_chars=50)
+        stabilized = stabilize_speaker_ids(chunks)
+        # Should return unchanged when nothing to stabilize
+        self.assertEqual(len(stabilized), len(chunks))
+        for orig, stab in zip(chunks, stabilized):
+            self.assertEqual(orig.shot_range, stab.shot_range)
+
+    def test_stable_hash_changes_after_stabilization(self):
+        text = "[Shot 1] (S1) speaks."
+        chunks = split_into_chunks(text, max_chunk_chars=100)
+        stabilized = stabilize_speaker_ids(chunks)
+        # Hashes should differ because header was added
+        for orig, stab in zip(chunks, stabilized):
+            self.assertNotEqual(orig.sha256, stab.sha256)
 
 
 if __name__ == "__main__":

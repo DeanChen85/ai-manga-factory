@@ -4,7 +4,7 @@
 
 > 平台交付基线为竖屏 720×1280、横屏 1280×720（H.264/AAC）。技术生成成功不等于内容合格；真实 H3 原生语音仍属于生成式对齐，不承诺逐采样点口型同步。交付判定以测试、真实内容验收和发布预检三者为准。
 
-新机器先阅读 [Quick start](docs/QUICKSTART.md)、[ComfyUI/H3 固定版本安装](docs/COMFYUI_H3_INSTALL.md)、[架构](docs/ARCHITECTURE.md)、[H3 提示词/渲染档位](docs/H3_PROMPT_AND_RENDER_PROFILES.md)、[外部项目复用评审](docs/research/EXTERNAL_PROJECTS_2026-08-28.md) 和 [更新记录](CHANGELOG.md)。
+新机器先阅读 [Quick start](docs/QUICKSTART.md)、[ComfyUI/H3 固定版本安装](docs/COMFYUI_H3_INSTALL.md)、[架构](docs/ARCHITECTURE.md)、[H3 提示词/渲染档位](docs/H3_PROMPT_AND_RENDER_PROFILES.md)、[节点包兼容性矩阵](docs/compatibility_matrix.md)、[外部项目复用评审](docs/research/EXTERNAL_PROJECTS_2026-08-28.md) 和 [更新记录](CHANGELOG.md)。
 
 ## 启动
 

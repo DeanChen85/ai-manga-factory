@@ -171,3 +171,28 @@ as seen so future daily runs don't re-process.
 - `pipeline/h3_profiles.py` - added `proof_fast` profile (FastH3 VSA 4-step)
 
 Test count: 339 (was 314, +25 new).
+
+
+## 2026-08-30 (manual round 3 — P2 + P4 optimization)
+
+**Implemented two immediately-effective optimizations**:
+
+1. **P4 — Speaker ID Stabilizer** (`prompt_relay.py`):
+   - `stabilize_speaker_ids()` injects complete (S1)/(S2) map and
+     <Picture/Audio N> tag list into every chunk header.
+   - Prevents role voice drift across relay chunks in long videos.
+   - 4 new tests pass; total 345.
+
+2. **P2 — Node Package Compatibility Matrix** (`comfy_preflight.py`):
+   - `docs/compatibility_matrix.md`: full table of 4 core node packages
+     with license, min ComfyUI version, known conflicts, install method.
+   - `_check_node_packages()`: auto-detects T8/RH dual-clock sampler
+     conflict, missing package warnings at startup.
+   - README.md links to the matrix.
+   - 2 new tests pass.
+
+Both are **zero-dependency** — no T8 installation required to benefit.
+T8 users get automatic conflict detection; non-T8 users get clean
+"not detected" warnings for optional packages.
+
+Test count: 345 (was 339, +6 new).
