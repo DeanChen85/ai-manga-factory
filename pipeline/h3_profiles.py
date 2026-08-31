@@ -44,6 +44,24 @@ H3_RENDER_PROFILES: dict[str, dict[str, Any]] = {
         "reference_fidelity": "identity",
         "delivery_eligible": True,
     },
+    # T8-style FastH3 VSA 4-step preview. Requires T8 custom node installed
+    # AND the FastVideo FastH3 VSA LoRA in models/loras/FastH3-VSA/.
+    # Tradeoff: 4 NFE + VSA learned-gate sparse attention; in motion-heavy
+    # long video types quality may drop vs proof (6 steps, dense). Default
+    # OFF — use only when explicitly enabled.
+    "proof_fast": {
+        "profile_id": "h3-proof-fast-v1",
+        "label": "FastH3 VSA 4 步极速预演",
+        "purpose": "T8 FastH3 VSA 4 步 + 90% 稀疏 attention；最便宜的预演",
+        "frame_count": 124,
+        "duration_seconds": 124 / 24,
+        "megapixels": 0.4,
+        "turbo_steps": 4,
+        "ref_image_size": "match",
+        "reference_fidelity": "vsa_sparse",
+        "delivery_eligible": False,
+        "requires": "t8mars/comfyui-minimax-h3-audio-T8 + FastH3-VSA LoRA",
+    },
 }
 
 

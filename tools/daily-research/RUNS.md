@@ -144,3 +144,30 @@ separation pattern already in place.
 `pipeline/long_video_orchestrator.py` — original Apache-2.0 code, 17
 new tests pass. See `docs/research/EXTERNAL_T8mars_minimax-h3-audio-T8_2026-08-30.md`.
 
+
+
+## 2026-08-30 (manual round 2)
+
+User asked: "听说有个闲兔社区的也是这个部署一个导演台完整的工作流"。
+
+**Search result**: No GitHub repo named "闲兔 / XianTu" found. Probably
+a WeChat/Discord/Feishu community or non-public repo.
+
+**However, found 6 related public H3 director projects on GitHub**:
+- karuvanan/MiniMax-H3-Director-Cut-Studio (⭐88, NOASSERTION)
+- Songssx/ComfyUI-MiniMaxH3-TimelineDirector (⭐80, GPL-3.0)
+- MikuLXK/ComfyUI-XYUE-H3-Studio (⭐2)
+- easyeye163/h3-video-coding (⭐1, has Feishu integration)
+- coconilu/h3-short-drama-studio (⭐1)
+- catiseyeqaq/ai-manju-shengcheng-xitong (⭐4, MIT)
+
+**Action**: Picked top 2 for next-round deep dive. Saved 6 candidates
+as seen so future daily runs don't re-process.
+
+**Implemented T8 priorities 2-4** (continuing from dbb39c8):
+- `pipeline/face_refine_runner.py` - T8 FaceRefine/SkinFinish wrapper
+- `pipeline/video_upscale.py` - T8 FlashVSR wrapper (2x/4x)
+- `pipeline/prompt_relay.py` - 7000-char H3 prompt splitter
+- `pipeline/h3_profiles.py` - added `proof_fast` profile (FastH3 VSA 4-step)
+
+Test count: 339 (was 314, +25 new).
