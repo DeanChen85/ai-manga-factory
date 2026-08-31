@@ -196,3 +196,32 @@ T8 users get automatic conflict detection; non-T8 users get clean
 "not detected" warnings for optional packages.
 
 Test count: 345 (was 339, +6 new).
+
+
+## 2026-08-30 (manual round 4 — H3 drama landscape research)
+
+User asked: "深挖 GitHub 上所有 AI 短剧视频创作项目，必须用 MiniMax H3 本地开源模型，不要云 API"。
+
+**Search result**: 51 unique repos found via GitHub API across 10 query vectors.
+**Deep-dived**: 12 candidates with full code/file review.
+**Top 5 by learning value** (Apache/MIT or no-license, local-first):
+1. `nkxx188/ComfyUI-MiniMaxH3-Easy` (⭐583, MIT) — `@` reference syntax + unified media UI
+2. `MIKA6941/Comfy-H3-Director` (⭐2, no license) — most aligned with our "drama director" positioning
+3. `akatz-ai/h3-relay` (⭐13, GPL-3.0) — elegant staged H3 + LTX enhancement pipeline
+4. `tritant/ComfyUI_MiniMax_H3_Extender` (⭐174, Apache-2.0) — motion context + disk caching
+5. `SlavaSexton/ComfyUI-Agent-Kit` (⭐90, Apache-2.0) — 581 workflow templates + hardware-aware selection
+
+**Excluded** (cloud-only or non-production):
+- `zerobudian/autodl-h3-storyboard-agent` — uses AutoDL Art cloud API
+- `PipeNetwork/minimax-h3-mlx` — pure quantization port
+- `AtlasCloudAI/awesome-minimax-h3` — awesome list, not code
+- `lxe/skythread` — personal art project
+
+**5 immediately applicable patterns**:
+1. `@` reference syntax → h3_director.py
+2. Unified media UI cards → web_app.py
+3. Civil/martial scene-type splitting → prompt_contracts.py
+4. Staged low-res → high-res pipeline → stable_promotion.py
+5. Disk cache dedup → task_store.py
+
+12 new repos pre-marked as seen so future daily runs don't re-process.
